@@ -24,6 +24,7 @@ private:
 	bool mCheckShader(GLuint uid);
 
 	GLuint mFrag;
+	GLuint mVert;
 };
 
 #endif

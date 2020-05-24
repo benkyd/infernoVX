@@ -39,14 +39,45 @@ void Loop( Display* display )
 {
 	SDL_Event e;
 
+	// settup drawing surface
+	float vertices[] = {
+	-1.0f,  1.0f, 0.0f,
+	 1.0f,  1.0f, 0.0f,
+	-1.0f, -1.0f, 0.0f,
+	 1.0f, -1.0f, 0.0f,
+	 1.0f,  1.0f, 0.0f,
+	-1.0f, -1.0f, 0.0f
+	};
+
+	GLuint VAO;
+	glGenVertexArrays( 1, &VAO );
+	glBindVertexArray( VAO );
+	GLuint VBO;
+	glGenBuffers( 1, &VBO );
+	glBindBuffer( GL_ARRAY_BUFFER, VBO );
+	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), (void*) 0 );
+	glEnableVertexAttribArray( 0 );
+
+	// settup shader
+	Shader raytracer = Shader();
+	raytracer.Load( ResourceBase + "tracer" );
+	raytracer.Link();
+	raytracer.Use();
+
+
+
 	while ( display->IsWindowOpen )
 	{
 		display->PrepareFrame();
 
-		// make framerate agnostic
+		// return window size
 		display->Input( &e );
 
 		// rendering here
+		raytracer.Use();
+		glDrawArrays( GL_TRIANGLES, 0, 6 );
+
 
 		display->NextFrame();
 	}
@@ -72,11 +103,6 @@ int main( int argc, char** argv )
 	version << VERSION_MAJOR << "." << VERSION_MINOR << "." << VERSION_PATCH;
 
 	Display display { WindowWidth, WindowHeight, version.str() };
-
-	Shader raytracer = Shader();
-	raytracer.Load( ResourceBase + "tracer" );
-	raytracer.Link();
-	raytracer.Use();
 
 	Loop( &display );
 
