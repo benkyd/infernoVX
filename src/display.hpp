@@ -14,13 +14,18 @@
 #include <glad/glad.h>
 #include <KHR/khrplatform.h>
 
+#include <glm/glm.hpp>
+
 class Display
 {
 public:
 
 	Display( int w, int h, std::string title );
 
-	void Input( SDL_Event* e );
+	// returns true if the display was resized
+	bool Input( SDL_Event* e );
+
+	glm::vec2 GetDisplaySizePx();
 
 	void PrepareFrame();
 	void NextFrame();

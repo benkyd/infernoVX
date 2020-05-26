@@ -65,19 +65,31 @@ void Loop( Display* display )
 	raytracer.Link();
 	raytracer.Use();
 
+	GLint uResolution = glGetUniformLocation( raytracer.Program, "vResolution" );
 
+	glm::vec2 resolution = display->GetDisplaySizePx();
+	glUniform3i( uResolution, resolution.x, resolution.y, 0 );
 
+	int i = 0;
 	while ( display->IsWindowOpen )
 	{
+		i++;
 		display->PrepareFrame();
 
 		// return window size
-		display->Input( &e );
+		bool didResize = display->Input( &e );
+		if ( didResize )
+		{
+			resolution = display->GetDisplaySizePx();
+			glUniform3i( uResolution, resolution.x, resolution.y, 0 );
+		}
+
 
 		// rendering here
 		raytracer.Use();
-		glDrawArrays( GL_TRIANGLES, 0, 6 );
 
+
+		glDrawArrays( GL_TRIANGLES, 0, 6 );
 
 		display->NextFrame();
 	}

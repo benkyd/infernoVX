@@ -53,11 +53,11 @@ Display::Display( int w, int h, std::string title )
 
 }
 
-void Display::Input( SDL_Event* e )
+bool Display::Input( SDL_Event* e )
 {
-
 	Uint8* state = (Uint8*) SDL_GetKeyboardState( NULL );
 
+	bool ret = false;
 	while ( SDL_PollEvent( e ) )
 	{
 		switch ( e->type )
@@ -85,6 +85,7 @@ void Display::Input( SDL_Event* e )
 				mW = e->window.data1; mH = e->window.data2;
 				// CameraUpdateProjection( mW, mH );
 				glViewport( 0, 0, mW, mH );
+				ret = true;
 			}
 
 			break;
@@ -102,7 +103,12 @@ void Display::Input( SDL_Event* e )
 	}
 
 	// m_player->MoveSDL( state );
+	return ret;
+}
 
+glm::vec2 Display::GetDisplaySizePx()
+{
+	return { mW, mH };
 }
 
 void Display::PrepareFrame()
