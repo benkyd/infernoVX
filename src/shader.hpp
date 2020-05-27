@@ -1,5 +1,5 @@
-#ifndef MINECRAFT_RENDERING_SHADER_H_
-#define MINECRAFT_RENDERING_SHADER_H_
+#ifndef INFERNOVX_SHADER_H_
+#define INFERNOVX_SHADER_H_
 
 #include <logger.h>
 

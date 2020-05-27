@@ -1,5 +1,5 @@
-#ifndef MINECRAFT_DISPLAY_H_
-#define MINECRAFT_DISPLAY_H_
+#ifndef INFERNOVX_DISPLAY_H_
+#define INFERNOVX_DISPLAY_H_
 
 #include <string>
 

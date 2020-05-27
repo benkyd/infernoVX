@@ -1,5 +1,5 @@
-#ifndef MINECRAFT_SETTINGS_H_
-#define MINECRAFT_SETTINGS_H_
+#ifndef INFERNOVX_SETTINGS_H_
+#define INFERNOVX_SETTINGS_H_
 
 #include <string>
 
