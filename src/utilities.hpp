@@ -12,4 +12,11 @@ inline std::string LoadTextFromFile( std::string file )
 	return text;
 }
 
+#include <glm/glm.hpp>
+
+inline int Index3D( int x, int y, int z, int width, int depth )
+{
+	return x + width * (y + depth * z);
+}
+
 #endif

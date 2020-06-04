@@ -70,6 +70,10 @@ void Loop( Display* display )
 	glm::vec2 resolution = display->GetDisplaySizePx();
 	glUniform3i( uResolution, resolution.x, resolution.y, 0 );
 
+
+
+
+
 	int i = 0;
 	while ( display->IsWindowOpen )
 	{
@@ -86,7 +90,7 @@ void Loop( Display* display )
 
 
 		// rendering here
-		raytracer.Use();
+		// raytracer.Use();
 
 
 		glDrawArrays( GL_TRIANGLES, 0, 6 );
