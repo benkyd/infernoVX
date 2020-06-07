@@ -16,6 +16,8 @@
 
 #include <glm/glm.hpp>
 
+class Camera;
+
 class Display
 {
 public:
@@ -23,7 +25,7 @@ public:
 	Display( int w, int h, std::string title );
 
 	// returns true if the display was resized
-	bool Input( SDL_Event* e );
+	bool Input( SDL_Event* e, Camera* camera );
 
 	glm::vec2 GetDisplaySizePx();
 

@@ -13,7 +13,10 @@
 #include "display.hpp"
 #include "settings.hpp"
 
+#include "scene.hpp"
+
 #include "shader.hpp"
+#include "camera.hpp"
 
 #define __DEBUG
 
@@ -41,12 +44,12 @@ void Loop( Display* display )
 
 	// settup drawing surface
 	float vertices[] = {
-	-1.0f,  1.0f, 0.0f,
-	 1.0f,  1.0f, 0.0f,
-	-1.0f, -1.0f, 0.0f,
-	 1.0f, -1.0f, 0.0f,
-	 1.0f,  1.0f, 0.0f,
-	-1.0f, -1.0f, 0.0f
+		-1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f
 	};
 
 	GLuint VAO;
@@ -60,7 +63,7 @@ void Loop( Display* display )
 	glEnableVertexAttribArray( 0 );
 
 	// settup shader
-	Shader raytracer = Shader();
+	Shader raytracer;
 	raytracer.Load( ResourceBase + "tracer" );
 	raytracer.Link();
 	raytracer.Use();
@@ -71,8 +74,14 @@ void Loop( Display* display )
 	glUniform3i( uResolution, resolution.x, resolution.y, 0 );
 
 
+	Shader drawshader;
+	drawshader.Load( ResourceBase + "simpleraster" );
+	drawshader.Link();
 
+	Camera camera { static_cast<int>(resolution.x), static_cast<int>(resolution.y) };
 
+	Scene scene;
+	scene.Load();
 
 	int i = 0;
 	while ( display->IsWindowOpen )
@@ -81,19 +90,20 @@ void Loop( Display* display )
 		display->PrepareFrame();
 
 		// return window size
-		bool didResize = display->Input( &e );
+		bool didResize = display->Input( &e, &camera );
 		if ( didResize )
 		{
 			resolution = display->GetDisplaySizePx();
+			camera.UpdateProjection( resolution.x, resolution.y );
 			glUniform3i( uResolution, resolution.x, resolution.y, 0 );
 		}
 
 
 		// rendering here
-		// raytracer.Use();
 
+		scene.OpenGLDraw( &camera, &drawshader );
 
-		glDrawArrays( GL_TRIANGLES, 0, 6 );
+		// glDrawArrays( GL_TRIANGLES, 0, 6 );
 
 		display->NextFrame();
 	}

@@ -4,9 +4,13 @@
 #include <stdint.h>
 #include <vector>
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 class Voxel;
+
+class Camera;
+class Shader;
 
 // TODO: sky class
 class Sky
@@ -21,26 +25,35 @@ public:
 	Scene();
 
 	// TODO: look into voxel storage formats
+	// load voxel scene into memory and create 
+	// a mesh and send it to the gpu
 	void Load();
 
-	void OpenGLDraw();
+	void OpenGLDraw( Camera* camera, Shader* shader );
 
 	// scene
 	glm::vec3 Dimensions;
 	// voxel data (indexed [x + WIDTH * (y + DEPTH * z)])
-	Voxel* Voxels;
+	uint8_t VoxelAt( int x, int y, int z );
+	uint8_t* Voxels;
 
 	~Scene();
 
 private:
 
+	int mIndex( int x, int y, int z );
+
 	// mesh data
+	// for mesh generation only too much 
+	// memory if theyre kept
 	std::vector<glm::vec3> mVertices;
 	std::vector<glm::vec3> mUvs;
-	int m_numVerts = 0;
-	glm::mat4 mModel;
+	int mNumVerts = 0;
 
-	int mIndex( int x, int y, int z );
+	// OpenGL stuff
+	GLuint mVao = 0;
+	GLuint mVbo = 0;
+	glm::mat4 mModel;
 
 };
 

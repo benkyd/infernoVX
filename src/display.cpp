@@ -1,5 +1,7 @@
 #include "display.hpp"
 
+#include "camera.hpp"
+
 Display::Display( int w, int h, std::string title )
 	: mLogger() 
 {
@@ -53,7 +55,7 @@ Display::Display( int w, int h, std::string title )
 
 }
 
-bool Display::Input( SDL_Event* e )
+bool Display::Input( SDL_Event* e, Camera* camera )
 {
 	Uint8* state = (Uint8*) SDL_GetKeyboardState( NULL );
 
@@ -83,8 +85,6 @@ bool Display::Input( SDL_Event* e )
 			if ( e->window.event == SDL_WINDOWEVENT_RESIZED )
 			{
 				mW = e->window.data1; mH = e->window.data2;
-				// CameraUpdateProjection( mW, mH );
-				glViewport( 0, 0, mW, mH );
 				ret = true;
 			}
 
@@ -99,10 +99,10 @@ bool Display::Input( SDL_Event* e )
 
 		}
 
-		// if ( IsMouseActive ) HandleMouseSDL( *e );
+		if ( IsMouseActive ) camera->HandleMouse( *e );
 	}
 
-	// m_player->MoveSDL( state );
+	camera->MoveCamera( state );
 	return ret;
 }
 
