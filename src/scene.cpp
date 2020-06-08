@@ -14,22 +14,28 @@ Scene::Scene()
 
 }
 
-void loadScene(glm::vec3* dimensions, uint8_t* voxels)
+void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 {
 	*dimensions = glm::vec3 { 10, 10, 10 };
 	
 	voxels = (uint8_t*)malloc( sizeof( uint8_t ) * (static_cast<size_t>(dimensions->x)
-											      * static_cast<size_t>(dimensions->y)
-											      * static_cast<size_t>(dimensions->z) ) );
-	for ( int i = 0; i < (dimensions->x * dimensions->y * dimensions->z); i++ )
+											       * static_cast<size_t>(dimensions->y)
+											       * static_cast<size_t>(dimensions->z) ) );
+	memset(voxels, 0, (static_cast<size_t>(dimensions->x)
+				      * static_cast<size_t>(dimensions->y)
+					  * static_cast<size_t>(dimensions->z) ) );
+
+	for ( int x = 0; x < dimensions->x; x++ )
+	for ( int y = 0; y < dimensions->y; y++ )
+	for ( int z = 0; z < dimensions->z; z++ )
 	{
 		if ( (rand() % 2) != 0 )
 		{
-			voxels[i] = (uint8_t) 1;
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t)1;
 		}
 		else
 		{
-			voxels[i] = (uint8_t) 0;
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t) 0;
 		}
 	}
 
@@ -56,11 +62,7 @@ void Scene::Load()
 	for ( int y = 0; y < Dimensions.y; y++ )
 	for ( int z = 0; z < Dimensions.z; z++ )
 	{
-		std::cout << x << " " << y << " " << z << std::endl;
 		//mVoxels[mIndex( x, y, z )] = Voxel { {x, y, z}, Voxels[mIndex( x, y, z )] };
-
-		std::vector<glm::vec3> tempVerts;
-		std::vector<glm::vec3> tempUVs;
 
 		uint8_t block = VoxelAt( x, y, z );
 
@@ -86,15 +88,16 @@ void Scene::Load()
 		if ( VoxelAt( x, y, z - 1 ) == 0 )
 			tmp.AddFace( EFaceType::Back );
 
+		std::vector<glm::vec3> tempVerts;
+		std::vector<glm::vec3> tempUVs;
 		tmp.GetMesh( tempVerts, tempUVs );
 		
-		std::cout << "tmp size" << tempVerts.size();
-
 		mVertices.insert( mVertices.end(), tempVerts.begin(), tempVerts.end() );
 		mUvs.insert( mUvs.end(), tempUVs.begin(), tempUVs.end() );
 
 		tmp.Clear();
 	}
+
 	logger << LOGGER_INFO << "Scene mesh built" << LOGGER_ENDL;
 
 	glGenVertexArrays( 1, &mVao );
@@ -107,10 +110,10 @@ void Scene::Load()
 	data.insert( data.end(), mVertices.begin(), mVertices.end() );
 	data.insert( data.end(), mUvs.begin(), mUvs.end() );
 
-	std::cout << "The following 3 values are the verts and uvs sent to the gpu" << std::endl;
-	std::cout << mVertices.size() << std::endl;
-	std::cout << mUvs.size() << std::endl;
-	std::cout << data.size() << std::endl;
+	logger << LOGGER_DEBUG << "The following 3 values are the verts and uvs sent to the gpu" << LOGGER_ENDL;
+	logger << LOGGER_DEBUG << mVertices.size() << LOGGER_ENDL;
+	logger << LOGGER_DEBUG << mUvs.size() << LOGGER_ENDL;
+	logger << LOGGER_DEBUG << data.size() << LOGGER_ENDL;
 
 	mNumVerts = mVertices.size();
 
@@ -138,16 +141,17 @@ void Scene::OpenGLDraw( Camera* camera, Shader* shader )
 	shader->Use();
 	glBindVertexArray( mVao );
 
-	GLint uniTrans = glGetUniformLocation( shader->Program, "model" );
+	GLint uniTrans = glGetUniformLocation( shader->Program, "Model" );
 	glUniformMatrix4fv( uniTrans, 1, GL_FALSE, glm::value_ptr( mModel ) );
 
-	GLint uniView = glGetUniformLocation( shader->Program, "view" );
+	GLint uniView = glGetUniformLocation( shader->Program, "View" );
 	glUniformMatrix4fv( uniView, 1, GL_FALSE, glm::value_ptr( camera->GetViewMatrix() ) );
 
-	GLint uniProj = glGetUniformLocation( shader->Program, "proj" );
+	GLint uniProj = glGetUniformLocation( shader->Program, "Proj" );
 	glUniformMatrix4fv( uniProj, 1, GL_FALSE, glm::value_ptr( camera->GetProjectionMatrix() ) );
 
 	glDrawArrays( GL_TRIANGLES, 0, mNumVerts );
+
 }
 
 uint8_t Scene::VoxelAt( int x, int y, int z )

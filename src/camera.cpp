@@ -9,7 +9,7 @@ Camera::Camera()
 	Pitch = 0.0f;
 	Yaw = 0.0f;
 
-	Position = {};
+	Position = { 0.0f, 0.0f, 0.0f };
 	LookDirection = {};
 
 	viewMatrix = {};
@@ -27,7 +27,7 @@ Camera::Camera( int w, int h )
 	Pitch = 0.0f;
 	Yaw = 0.0f;
 
-	Position = {};
+	Position = { 0.0f, 0.0f, 0.0f };
 	LookDirection = {};
 
 	viewMatrix = {};
@@ -105,6 +105,8 @@ void Camera::HandleMouse( SDL_Event e )
 void Camera::MoveCamera( Uint8* state )
 {
 
+	float movementSpeed = 0.1f;
+
 	float dx = 0;
 	float dz = 0;
 	float dy = 0;
@@ -115,7 +117,7 @@ void Camera::MoveCamera( Uint8* state )
 		sin( Yaw ), cos( Yaw )
 	};
 
-	glm::vec2 f( 0.0, 1.0 );
+	glm::vec2 f( 0.0, movementSpeed );
 	f = f * rotate;
 
 	if ( state[SDL_SCANCODE_W] )
@@ -140,11 +142,11 @@ void Camera::MoveCamera( Uint8* state )
 	}
 	if ( state[SDL_SCANCODE_SPACE] )
 	{
-		dy += 1;
+		dy += movementSpeed;
 	}
 	if ( state[SDL_SCANCODE_LSHIFT] )
 	{
-		dy -= 1;
+		dy -= movementSpeed;
 	}
 
 	// get current view matrix

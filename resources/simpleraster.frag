@@ -3,22 +3,21 @@
 vec3 SkyColour = vec3(186.0f / 255.0f, 214.0f / 255.0f, 254.0f / 255.0f);
 
 in vec3 fTexCoord;
-in float fDistance;
+in float fZ;
+in float fW;
 
 out vec4 oColour;
 
+float near = 0.1;
+float far = 1000;
+
 void main() {
 
-	oColour = vec4(.9, .9, .9, 1);
+	float depth = fZ / fW;
 
-	if (oColour.w == .0)
-		discard;
-	
-	float fogMax = 60000;
-	
-	vec3 colour = mix(oColour.xyz, SkyColour, min(1.0f, fDistance / fogMax));
+	float ndc = depth * 2.0 - 1.0;
+	float linear = (2.0 * near * far) / (far + near - ndc * (far - near));
 
-	// Retain fragment transparency
-	oColour = vec4(colour, oColour.w);
+	oColour = vec4(linear, linear, linear, 1);
 
 }

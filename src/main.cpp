@@ -40,53 +40,23 @@ void version()
 
 void Loop( Display* display )
 {
+	Logger logger;
 	SDL_Event e;
 
-	// settup drawing surface
-	float vertices[] = {
-		-1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f
-	};
-
-	GLuint VAO;
-	glGenVertexArrays( 1, &VAO );
-	glBindVertexArray( VAO );
-	GLuint VBO;
-	glGenBuffers( 1, &VBO );
-	glBindBuffer( GL_ARRAY_BUFFER, VBO );
-	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), (void*) 0 );
-	glEnableVertexAttribArray( 0 );
-
-	// settup shader
-	Shader raytracer;
-	raytracer.Load( ResourceBase + "tracer" );
-	raytracer.Link();
-	raytracer.Use();
-
-	GLint uResolution = glGetUniformLocation( raytracer.Program, "vResolution" );
-
 	glm::vec2 resolution = display->GetDisplaySizePx();
-	glUniform3i( uResolution, resolution.x, resolution.y, 0 );
 
+	Scene scene;
+	scene.Load();
 
 	Shader drawshader;
 	drawshader.Load( ResourceBase + "simpleraster" );
 	drawshader.Link();
 
 	Camera camera { static_cast<int>(resolution.x), static_cast<int>(resolution.y) };
+	std::cout << camera.Position.x << " " << camera.Position.y << " " << camera.Position.z << std::endl;
 
-	Scene scene;
-	scene.Load();
-
-	int i = 0;
 	while ( display->IsWindowOpen )
 	{
-		i++;
 		display->PrepareFrame();
 
 		// return window size
@@ -95,7 +65,7 @@ void Loop( Display* display )
 		{
 			resolution = display->GetDisplaySizePx();
 			camera.UpdateProjection( resolution.x, resolution.y );
-			glUniform3i( uResolution, resolution.x, resolution.y, 0 );
+			glViewport( 0, 0, resolution.x, resolution.y );
 		}
 
 
@@ -103,7 +73,6 @@ void Loop( Display* display )
 
 		scene.OpenGLDraw( &camera, &drawshader );
 
-		// glDrawArrays( GL_TRIANGLES, 0, 6 );
 
 		display->NextFrame();
 	}

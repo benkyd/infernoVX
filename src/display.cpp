@@ -6,6 +6,8 @@ Display::Display( int w, int h, std::string title )
 	: mLogger() 
 {
 	
+	mW = w; mH = h;
+
 	mLogger << LOGGER_INFO << "Initializing display" << LOGGER_ENDL;
 	SDL_Init( SDL_INIT_VIDEO|SDL_INIT_AUDIO );
 
@@ -47,6 +49,7 @@ Display::Display( int w, int h, std::string title )
 	glCullFace( GL_BACK );
 	glEnable( GL_DEPTH_TEST );
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glViewport( 0, 0, w, h );
 
 	mLogger << LOGGER_INFO << "Loaded OpenGL" << LOGGER_ENDL;
 	mLogger << LOGGER_ENDL;
