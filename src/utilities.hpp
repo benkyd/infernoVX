@@ -14,9 +14,9 @@ inline std::string LoadTextFromFile( std::string file )
 
 #include <glm/glm.hpp>
 
-inline int Index3D( int x, int y, int z, int width, int depth )
+inline int Index3D( int x, int y, int z, int width, int height, int depth )
 {
-	return x + width * (y + depth * z);
+	return x + y * width + z * depth * height;
 }
 
 #endif

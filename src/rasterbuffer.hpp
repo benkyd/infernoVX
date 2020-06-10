@@ -11,7 +11,7 @@ namespace EGBufferType
     // depth texture is handled seperately
     enum TextureType : uint8_t
     {
-        WorldPosition,
+        GLPosition,
         Albedo,
         SurfaceNormal,
         TexCoord,

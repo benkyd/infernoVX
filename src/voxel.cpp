@@ -127,3 +127,9 @@ std::vector<glm::vec3> Voxel::mTranslateIntoWorld( std::vector<glm::vec3> verts,
 	return verts;
 
 }
+
+Voxel::~Voxel()
+{
+	mVertices.clear();
+	mUvs.clear();
+}

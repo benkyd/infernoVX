@@ -16,19 +16,28 @@ Scene::Scene()
 
 void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 {
-	*dimensions = glm::vec3 { 10, 10, 10 };
+	*dimensions = glm::vec3 { 5, 5, 5 };
 	
 	voxels = (uint8_t*)malloc( sizeof( uint8_t ) * (static_cast<size_t>(dimensions->x)
-											       * static_cast<size_t>(dimensions->y)
-											       * static_cast<size_t>(dimensions->z) ) );
+											      * static_cast<size_t>(dimensions->y)
+											      * static_cast<size_t>(dimensions->z) ) );
 	memset(voxels, 0, (static_cast<size_t>(dimensions->x)
-				      * static_cast<size_t>(dimensions->y)
-					  * static_cast<size_t>(dimensions->z) ) );
+				     * static_cast<size_t>(dimensions->y)
+					 * static_cast<size_t>(dimensions->z) ) );
 
 	for ( int x = 0; x < dimensions->x; x++ )
 	for ( int y = 0; y < dimensions->y; y++ )
 	for ( int z = 0; z < dimensions->z; z++ )
 	{
+		if ( z == 0 )
+		{
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t)1;
+			std::cout << x << " " << y << " " << z << std::endl;
+		}
+		else
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t)0;
+
+		/*
 		if ( (rand() % 2) != 0 )
 		{
 			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t)1;
@@ -37,6 +46,7 @@ void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 		{
 			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t) 0;
 		}
+		*/
 	}
 
 }
@@ -51,10 +61,6 @@ void Scene::Load()
 
 	logger << LOGGER_INFO << "Scene loaded" << LOGGER_ENDL;
 
-	//mVoxels = (Voxel*)malloc( sizeof( Voxel ) * (static_cast<size_t>(Dimensions.x)
-	//										   * static_cast<size_t>(Dimensions.y)
-	//										   * static_cast<size_t>(Dimensions.z) ) );
-
 	// model matrix
 	mModel = glm::mat4( 1.0f );
 
@@ -62,40 +68,42 @@ void Scene::Load()
 	for ( int y = 0; y < Dimensions.y; y++ )
 	for ( int z = 0; z < Dimensions.z; z++ )
 	{
-		//mVoxels[mIndex( x, y, z )] = Voxel { {x, y, z}, Voxels[mIndex( x, y, z )] };
 
 		uint8_t block = VoxelAt( x, y, z );
 
 		if ( block == 0 ) continue;
 
-		Voxel tmp( { x, y, z }, block );
+		Voxel* tmp = new Voxel( { x, y, z }, block );
 
 		if ( VoxelAt( x + 1, y, z ) == 0 )
-			tmp.AddFace( EFaceType::Right );
+			tmp->AddFace( EFaceType::Right );
 
 		if ( VoxelAt( x - 1, y, z ) == 0 )
-			tmp.AddFace( EFaceType::Left );
+			tmp->AddFace( EFaceType::Left );
 
 		if ( VoxelAt( x, y + 1, z ) == 0 )
-			tmp.AddFace( EFaceType::Top );
+			tmp->AddFace( EFaceType::Top );
 
 		if ( VoxelAt( x, y - 1, z ) == 0 )
-			tmp.AddFace( EFaceType::Bottom );
+			tmp->AddFace( EFaceType::Bottom );
 
 		if ( VoxelAt( x, y, z + 1 ) == 0 )
-			tmp.AddFace( EFaceType::Front );
+			tmp->AddFace( EFaceType::Front );
 
 		if ( VoxelAt( x, y, z - 1 ) == 0 )
-			tmp.AddFace( EFaceType::Back );
+			tmp->AddFace( EFaceType::Back );
 
 		std::vector<glm::vec3> tempVerts;
 		std::vector<glm::vec3> tempUVs;
-		tmp.GetMesh( tempVerts, tempUVs );
+		tmp->GetMesh( tempVerts, tempUVs );
 		
 		mVertices.insert( mVertices.end(), tempVerts.begin(), tempVerts.end() );
 		mUvs.insert( mUvs.end(), tempUVs.begin(), tempUVs.end() );
 
-		tmp.Clear();
+		delete tmp;
+
+		tempVerts.clear();
+		tempUVs.clear();
 	}
 
 	logger << LOGGER_INFO << "Scene mesh built" << LOGGER_ENDL;
@@ -169,7 +177,7 @@ uint8_t Scene::VoxelAt( int x, int y, int z )
 
 int Scene::mIndex( int x, int y, int z )
 {
-	return x + Dimensions.x * (y + Dimensions.z * z);
+	return Index3D( x, y, z, Dimensions.x, Dimensions.y, Dimensions.z );
 }
 
 Scene::~Scene()

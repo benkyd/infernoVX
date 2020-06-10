@@ -155,6 +155,8 @@ public:
 
 	uint8_t Type;
 
+	~Voxel();
+
 private:
 
 	glm::vec3 mPosition;
