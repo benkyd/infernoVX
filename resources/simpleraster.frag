@@ -7,7 +7,7 @@ in vec3 fTexCoord;
 out vec4 oColour;
 
 float near = 0.1;
-float far = 1000;
+float far = 10;
 
 
 void main()
