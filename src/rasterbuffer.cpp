@@ -2,8 +2,19 @@
 
 #include <logger.h>
 
+RasterRenderer::RasterRenderer()
+{
+    DefferedShader = Shader();
+    DefferedShader.Load( "deffered.frag" );
+    DefferedShader.Link();
+
+}
+
+
 RasterBuffer::RasterBuffer()
 {
+
+
 
 }
 
@@ -11,18 +22,21 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
 {
     Logger logger;
 
-	glGenFramebuffers( 1, &mFbo );
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, mFbo );
+	glGenFramebuffers( 1, &FBO );
+	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, FBO );
 
 	glGenTextures( EGBufferType::COUNT, mTextures );
 	glGenTextures( 1, &mDepthTexture );
 
-    for ( unsigned int i = 0; i < EGBufferType::COUNT; i++ )
+    for ( int i = 0; i < EGBufferType::COUNT; i++ )
     {
         glBindTexture( GL_TEXTURE_2D, mTextures[i] );
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB32F, RenderWidth, RenderHeight, 0, GL_RGB, GL_FLOAT, NULL );
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, mTextures[i], 0 );
     }
+
+    // nice 69 lol
+    uint8_t numVerticies = 69;
 
     // depth
     glBindTexture( GL_TEXTURE_2D, mDepthTexture );

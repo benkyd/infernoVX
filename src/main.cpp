@@ -13,14 +13,14 @@
 #include "display.hpp"
 #include "settings.hpp"
 
-#include "scene.hpp"
+#include "renderpass.hpp"
 
 #include "shader.hpp"
 #include "camera.hpp"
 
 #define __DEBUG
 
-static const int VERSION_MAJOR = 1;
+static const int VERSION_MAJOR = 0;
 static const int VERSION_MINOR = 1;
 static const int VERSION_PATCH = 0;
 
@@ -45,15 +45,10 @@ void Loop( Display* display )
 
 	glm::vec2 resolution = display->GetDisplaySizePx();
 
-	Scene scene;
-	scene.Load();
-
-	Shader drawshader;
-	drawshader.Load( ResourceBase + "simpleraster" );
-	drawshader.Link();
-
 	Camera camera { static_cast<int>(resolution.x), static_cast<int>(resolution.y) };
-	std::cout << camera.Position.x << " " << camera.Position.y << " " << camera.Position.z << std::endl;
+	std::cout << "Camera Position: " << camera.Position.x << " " << camera.Position.y << " " << camera.Position.z << std::endl;
+
+	Pipeline pipeline( &camera );
 
 	while ( display->IsWindowOpen )
 	{
@@ -66,14 +61,11 @@ void Loop( Display* display )
 			resolution = display->GetDisplaySizePx();
 			camera.UpdateProjection( resolution.x, resolution.y );
 			glViewport( 0, 0, resolution.x, resolution.y );
+			// notify framebuffer and raytracer
 		}
 
-
-		// rendering here
-
-		scene.OpenGLDraw( &camera, &drawshader );
-
-
+		pipeline.NextFrame( display );
+		
 		display->NextFrame();
 	}
 

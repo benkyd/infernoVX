@@ -29,24 +29,14 @@ void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 	for ( int y = 0; y < dimensions->y; y++ )
 	for ( int z = 0; z < dimensions->z; z++ )
 	{
-		if ( y == 1 )
-		{
-			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t)1;
-			std::cout << x << " " << y << " " << z << std::endl;
-		}
-		else
-			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t)0;
-
-		/*
 		if ( (rand() % 2) != 0 )
 		{
-			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t)1;
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t)1;
 		}
 		else
 		{
-			voxels[Index3D( x, y, z, dimensions->x, dimensions->z)] = (uint8_t) 0;
+			voxels[Index3D( x, y, z, dimensions->x, dimensions->y, dimensions->z )] = (uint8_t) 0;
 		}
-		*/
 	}
 
 }

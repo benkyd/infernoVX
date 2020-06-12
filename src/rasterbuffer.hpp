@@ -5,6 +5,23 @@
 
 #include <glad/glad.h>
 
+#include "shader.hpp"
+
+class RasterRenderer
+{
+public:
+
+    RasterRenderer();
+
+
+
+    Shader DefferedShader;
+
+};
+
+
+// implements a basic G-Buffer for deffered rendering
+
 namespace EGBufferType
 {
     // Will need more information regarding the surface of hit
@@ -18,7 +35,6 @@ namespace EGBufferType
         COUNT
     };
 }
-
 
 class RasterBuffer
 {
@@ -35,9 +51,10 @@ public:
 
     ~RasterBuffer();
 
+    GLuint FBO;
+
 private:
 
-    GLuint mFbo;
     GLuint mTextures[EGBufferType::COUNT];
     GLuint mDepthTexture;
 };
