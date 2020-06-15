@@ -3,9 +3,6 @@ project(InfernoVX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} CMakeModules/)
 
-# set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "-Ofast")
-
 set(executable output)
 set(SrcDIR ./src)
 set(IncludeDIR ./include)
@@ -15,10 +12,13 @@ add_definitions(-D_RESOURCES="${CMAKE_SOURCE_DIR}/resources/")
 message(${CMAKE_SOURCE_DIR}/resources)
 
 if (UNIX)
+	# set(CMAKE_BUILD_TYPE Debug)
+	# set(CMAKE_CXX_FLAGS "-Ofast")
 	find_package(SDL2 REQUIRED)
 endif(UNIX)
 
 if (WIN32)
+	set(CMAKE_CXX_FLAGS "/Ox")
 	include_directories(${executable}
 		"C:/dev/glm"
 		"C:/dev/SDL2/include/"
@@ -47,9 +47,11 @@ file(GLOB SourceFiles
 add_executable(${executable} ${SourceFiles})
 
 set_target_properties(${executable} PROPERTIES
-	CXX_STANDARD 17
+	CXX_STANDARD 20
 	CXX_EXTENSIONS OFF
 )
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 if (UNIX)
 	target_link_libraries(${executable}

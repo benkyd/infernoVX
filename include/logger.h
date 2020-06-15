@@ -8,7 +8,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-typedef enum {
+typedef enum
+{
 	CONSOLE_COLOUR_FG_BLACK = 0,
 	CONSOLE_COLOUR_FG_BLUE = FOREGROUND_BLUE,
 	CONSOLE_COLOUR_FG_GREEN = FOREGROUND_GREEN,
@@ -30,13 +31,14 @@ typedef enum {
 } ConsoleColour;
 
 #ifdef _WIN32
-	static HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-	static WORD wOldColorAttrs;
-	static CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+static HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE );
+static WORD wOldColorAttrs;
+static CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
 #endif
 
 #else
-typedef enum {
+typedef enum
+{
 	CONSOLE_COLOUR_FG_DEFAULT = 39,
 	CONSOLE_COLOUR_FG_BLACK = 30,
 	CONSOLE_COLOUR_FG_RED = 31,
@@ -61,21 +63,24 @@ typedef enum {
 } ConsoleColour;
 #endif
 
-class Colour {
+class Colour
+{
 public:
 	static void resetColour();
 
 	template<typename T>
-	static void consoleColour(T colour) {
-	#ifdef _WIN32
-		SetConsoleTextAttribute(h, colour);
-	#else
+	static void consoleColour( T colour )
+	{
+#ifdef _WIN32
+		SetConsoleTextAttribute( h, colour );
+#else
 		std::cout << "\033[" << colour << "m";
-	#endif
+#endif
 	}
 };
 
-typedef enum {
+typedef enum
+{
 	LOGGER_INFO = CONSOLE_COLOUR_FG_GREEN,
 	LOGGER_WARN = CONSOLE_COLOUR_FG_YELLOW,
 	LOGGER_ERROR = CONSOLE_COLOUR_FG_LIGHT_RED,
@@ -83,40 +88,52 @@ typedef enum {
 	LOGGER_DEBUG = CONSOLE_COLOUR_FG_BLUE
 } LogType;
 
-typedef enum {
+typedef enum
+{
 	LOGGER_EXIT,
 	LOGGER_ENDL
 } LogAction;
 
-class Logger {
+class Logger
+{
 public:
 	Logger();
 
-	Logger& operator<< (const LogType type) {
+	Logger& operator<< ( const LogType type )
+	{
 		std::cout << "[";
-		Colour::consoleColour(type);
+		Colour::consoleColour( type );
 		std::cout << lookupTable[type];
-		Colour::consoleColour(CONSOLE_COLOUR_FG_DEFAULT);
+		Colour::consoleColour( CONSOLE_COLOUR_FG_DEFAULT );
 		std::cout << "] ";
+		if ( type == LOGGER_PANIC )
+			IsPaniced = true;
 		return *this;
 	}
 
-	Logger& operator<< (const LogAction action) {
-		if (action == LOGGER_ENDL) {
+	Logger& operator<< ( const LogAction action )
+	{
+		if ( action == LOGGER_ENDL )
+		{
 			std::cout << outStream.str() << std::endl;
-			outStream.str(std::string());;
+			outStream.str( std::string() );;
 			outStream.flush();
+			if ( IsPaniced )
+				exit( 0 );
 		}
-		if (action == LOGGER_EXIT)
-			exit(0);
+		if ( action == LOGGER_EXIT )
+			exit( 0 );
 		return *this;
 	}
 
 	template<typename T>
-	Logger& operator<< (const T& data) {
+	Logger& operator<< ( const T& data )
+	{
 		outStream << data;
 		return *this;
 	}
+
+	bool IsPaniced = false;
 
 	std::stringstream outStream;
 	std::map<LogType, std::string> lookupTable;
@@ -127,10 +144,11 @@ public:
 #ifdef LOGGER_DEFINITION
 #undef LOGGER_DEFINITION
 
-void Colour::resetColour() {
+void Colour::resetColour()
+{
 #ifdef _WIN32
-	SetConsoleTextAttribute(h, CONSOLE_COLOUR_BG_DEFAULT);
-	SetConsoleTextAttribute(h, CONSOLE_COLOUR_FG_DEFAULT);
+	SetConsoleTextAttribute( h, CONSOLE_COLOUR_BG_DEFAULT );
+	SetConsoleTextAttribute( h, CONSOLE_COLOUR_FG_DEFAULT );
 #else
 	std::cout
 		<< "\033[" << CONSOLE_COLOUR_BG_DEFAULT << "m"
@@ -138,10 +156,11 @@ void Colour::resetColour() {
 #endif
 }
 
-Logger::Logger() {
+Logger::Logger()
+{
 
 #ifdef _WIN32
-	GetConsoleScreenBufferInfo(h, &csbiInfo);
+	GetConsoleScreenBufferInfo( h, &csbiInfo );
 	wOldColorAttrs = csbiInfo.wAttributes;
 #endif
 

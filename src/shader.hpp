@@ -5,12 +5,13 @@
 
 #include <glad/glad.h>
 
-class Shader {
+class Shader
+{
 public:
 	Shader();
 
-	void Load(std::string path);
-	void Load(std::string path, GLenum type);
+	void Load( std::string path );
+	void Load( std::string path, GLenum type );
 
 	GLuint Program;
 	void Link();
@@ -19,9 +20,9 @@ public:
 
 	~Shader();
 private:
-	std::shared_ptr<Logger> mLogger;
+	std::unique_ptr<Logger> mLogger;
 
-	bool mCheckShader(GLuint uid);
+	bool mCheckShader( GLuint uid );
 
 	GLuint mFrag;
 	GLuint mVert;

@@ -13,12 +13,10 @@
 #include "display.hpp"
 #include "settings.hpp"
 
-#include "renderpass.hpp"
+#include "pipeline.hpp"
 
 #include "shader.hpp"
 #include "camera.hpp"
-
-#define __DEBUG
 
 static const int VERSION_MAJOR = 0;
 static const int VERSION_MINOR = 1;
@@ -48,7 +46,7 @@ void Loop( Display* display )
 	Camera camera { static_cast<int>(resolution.x), static_cast<int>(resolution.y) };
 	std::cout << "Camera Position: " << camera.Position.x << " " << camera.Position.y << " " << camera.Position.z << std::endl;
 
-	Pipeline pipeline( &camera );
+	Pipeline pipeline( display, &camera );
 
 	while ( display->IsWindowOpen )
 	{
@@ -79,7 +77,7 @@ int main( int argc, char** argv )
 
 	Logger mLogger;
 	
-#ifdef __DEBUG
+#ifdef _DEBUG
 	mLogger << LOGGER_DEBUG << "Debug mode enabled" << LOGGER_ENDL;
 #endif
 
@@ -96,3 +94,5 @@ int main( int argc, char** argv )
 	return 0;
 
 }
+
+

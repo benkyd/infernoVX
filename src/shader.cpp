@@ -7,7 +7,7 @@ Shader::Shader()
 	mFrag = 0;
 	mVert = 0;
 
-	mLogger = std::make_shared<Logger>();
+	mLogger = std::make_unique<Logger>();
 }
 
 
@@ -38,6 +38,8 @@ void Shader::Load( std::string path, GLenum type )
 	const char* shaderSource = loadedShaderSource.c_str();
 	int shaderSourceLength = loadedShaderSource.length();
 
+	*mLogger << LOGGER_DEBUG << loadedShaderSource << LOGGER_ENDL;
+
 	glShaderSource( activeShader, 1, &shaderSource, &shaderSourceLength );
 }
 
@@ -50,16 +52,18 @@ void Shader::Link()
 	}
 
 	glCompileShader( mVert );
-	if ( mCheckShader( mVert ) )
+	if ( !mCheckShader( mVert ) )
 	{
-		*mLogger << LOGGER_INFO << "Vertex shader '" << mVert << "' compiled..." << LOGGER_ENDL;
+		*mLogger << LOGGER_PANIC << "ERROR COMPILING VERTEX SHADER " << mVert << LOGGER_ENDL;
 	}
+	*mLogger << LOGGER_INFO << "Vertex shader '" << mVert << "' compiled..." << LOGGER_ENDL;
 
 	glCompileShader( mFrag );
-	if ( mCheckShader( mFrag ) )
+	if ( !mCheckShader( mFrag ) )
 	{
-		*mLogger << LOGGER_INFO << "Fragment shader '" << mFrag << "' compiled..." << LOGGER_ENDL;
+		*mLogger << LOGGER_PANIC << "ERROR COMPILING FRAGMENT SHADER " << mFrag << LOGGER_ENDL;
 	}
+	*mLogger << LOGGER_INFO << "Fragment shader '" << mFrag << "' compiled..." << LOGGER_ENDL;
 
 	Program = glCreateProgram();
 
@@ -89,10 +93,10 @@ bool Shader::mCheckShader( GLuint uid )
 
 	if ( status == GL_FALSE )
 	{
-		char buf[512];
+		char* buf = (char*)malloc( sizeof( char ) * 512 );
 		glGetShaderInfoLog( uid, 512, NULL, buf );
 		*mLogger << LOGGER_ERROR << buf << LOGGER_ENDL;
-		delete buf;
+		free( buf );
 		return false;
 	}
 

@@ -34,6 +34,7 @@ public:
 
 	bool IsWindowOpen = false;
 	bool IsMouseActive = true;
+	bool WasResizedLastFrame = false;
 
 private:
 

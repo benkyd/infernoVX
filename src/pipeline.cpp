@@ -1,4 +1,4 @@
-#include "renderpass.hpp"
+#include "pipeline.hpp"
 
 #include "camera.hpp"
 #include "display.hpp"
@@ -6,8 +6,8 @@
 #include "scene.hpp"
 
 
-Pipeline::Pipeline( Camera* camera )
-	: RasterPass()
+Pipeline::Pipeline( Display* display, Camera* camera )
+	: RasterPass( display->GetDisplaySizePx().x, display->GetDisplaySizePx().y )
 {
 	mCamera = camera;
 

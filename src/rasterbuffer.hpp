@@ -7,19 +7,6 @@
 
 #include "shader.hpp"
 
-class RasterRenderer
-{
-public:
-
-    RasterRenderer();
-
-
-
-    Shader DefferedShader;
-
-};
-
-
 // implements a basic G-Buffer for deffered rendering
 
 namespace EGBufferType
@@ -48,6 +35,8 @@ public:
 
     void BindWrite();
     void BindRead();
+    // COUNT IS DEPTH
+    void BindReadBuffer( EGBufferType::TextureType buffer );
 
     ~RasterBuffer();
 
@@ -57,6 +46,22 @@ private:
 
     GLuint mTextures[EGBufferType::COUNT];
     GLuint mDepthTexture;
+};
+
+
+class RasterRenderer
+{
+public:
+
+    RasterRenderer( int w, int h );
+
+    // resize?
+
+    void Render( );
+
+    RasterBuffer GBuffer;
+    Shader DefferedShader;
+
 };
 
 #endif

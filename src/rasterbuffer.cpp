@@ -2,15 +2,6 @@
 
 #include <logger.h>
 
-RasterRenderer::RasterRenderer()
-{
-    DefferedShader = Shader();
-    DefferedShader.Load( "deffered.frag" );
-    DefferedShader.Link();
-
-}
-
-
 RasterBuffer::RasterBuffer()
 {
 
@@ -57,24 +48,53 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
     // put back the default framebuffer
     glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
 
+    logger << LOGGER_DEBUG << "Loaded RasterBuffer with " << EGBufferType::COUNT + 1 << " buffers" << LOGGER_ENDL;
+
 }
 
 void RasterBuffer::Resize( int RenderWidth, int RenderHeight )
 {
-    // TODO
+    // TODO: will involve remaking all buffers
+    // might need to think about this because
+    // it would mean that accumilation has
+    // to be reset in the raytracer
 }
 
 void RasterBuffer::BindWrite()
 {
-
+    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, FBO );
 }
 
 void RasterBuffer::BindRead()
 {
+    glBindFramebuffer( GL_READ_FRAMEBUFFER, FBO );
+}
 
+void RasterBuffer::BindReadBuffer( EGBufferType::TextureType buffer )
+{
+    // use depth buffer
+    if ( buffer == EGBufferType::COUNT )
+    {
+        glReadBuffer( GL_DEPTH_ATTACHMENT );
+    }
+    else
+    {
+        glReadBuffer( GL_COLOR_ATTACHMENT0 + buffer );
+    }
 }
 
 RasterBuffer::~RasterBuffer()
 {
+
+}
+
+
+
+RasterRenderer::RasterRenderer( int w, int h )
+{
+    DefferedShader.Load( std::string( _RESOURCES ) + "simpleraster" );
+    DefferedShader.Link();
+
+    GBuffer.Init( w, h );
 
 }

@@ -16,7 +16,7 @@ Scene::Scene()
 
 void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 {
-	*dimensions = glm::vec3 { 5, 5, 5 };
+	*dimensions = glm::vec3 { 100, 100, 100 };
 	
 	voxels = (uint8_t*)malloc( sizeof( uint8_t ) * (static_cast<size_t>(dimensions->x)
 											      * static_cast<size_t>(dimensions->y)

@@ -13,7 +13,7 @@ class Pipeline
 public:
 
 	// does not pass ownership
-	Pipeline( Camera* camera );
+	Pipeline( Display* display, Camera* camera );
 
 	// does not pass ownership
 	void NextFrame( Display* display );

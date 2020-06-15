@@ -62,6 +62,8 @@ bool Display::Input( SDL_Event* e, Camera* camera )
 {
 	Uint8* state = (Uint8*) SDL_GetKeyboardState( NULL );
 
+	WasResizedLastFrame = false;
+
 	bool ret = false;
 	while ( SDL_PollEvent( e ) )
 	{
@@ -106,6 +108,9 @@ bool Display::Input( SDL_Event* e, Camera* camera )
 	}
 
 	camera->MoveCamera( state );
+
+	WasResizedLastFrame = ret;
+
 	return ret;
 }
 
