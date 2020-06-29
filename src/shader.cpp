@@ -79,9 +79,14 @@ void Shader::Link()
 
 }
 
-void Shader::Use()
+void Shader::Bind()
 {
 	glUseProgram( Program );
+}
+
+void Shader::UnBind()
+{
+	glUseProgram( 0 );
 }
 
 

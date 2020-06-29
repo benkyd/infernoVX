@@ -2,6 +2,7 @@
 #define INFERNOVX_RENDERPASS_H_
 
 #include "rasterbuffer.hpp"
+#include "shader.hpp"
 
 class Camera;
 class Display;
@@ -20,7 +21,9 @@ public:
 
 	GLuint VBO, VAO;
 
-	RasterRenderer RasterPass;
+	RasterBuffer GBuffer;
+	Shader DefferedShader;
+	Shader DrawQuadShader;
 
 private:
 

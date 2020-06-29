@@ -14,7 +14,7 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
     Logger logger;
 
 	glGenFramebuffers( 1, &FBO );
-	glBindFramebuffer( GL_DRAW_FRAMEBUFFER, FBO );
+	glBindFramebuffer( GL_FRAMEBUFFER, FBO );
 
 	glGenTextures( EGBufferType::COUNT, mTextures );
 	glGenTextures( 1, &mDepthTexture );
@@ -46,7 +46,7 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
     }
 
     // put back the default framebuffer
-    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 );
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
     logger << LOGGER_DEBUG << "Loaded RasterBuffer with " << EGBufferType::COUNT + 1 << " buffers" << LOGGER_ENDL;
 
@@ -62,7 +62,7 @@ void RasterBuffer::Resize( int RenderWidth, int RenderHeight )
 
 void RasterBuffer::BindWrite()
 {
-    glBindFramebuffer( GL_DRAW_FRAMEBUFFER, FBO );
+    glBindFramebuffer( GL_FRAMEBUFFER, FBO );
 }
 
 void RasterBuffer::BindRead()
@@ -83,18 +83,12 @@ void RasterBuffer::BindReadBuffer( EGBufferType::TextureType buffer )
     }
 }
 
-RasterBuffer::~RasterBuffer()
+GLuint RasterBuffer::GetTexture( EGBufferType::TextureType texture )
 {
-
+    return mTextures[texture];
 }
 
-
-
-RasterRenderer::RasterRenderer( int w, int h )
+RasterBuffer::~RasterBuffer()
 {
-    DefferedShader.Load( std::string( _RESOURCES ) + "simpleraster" );
-    DefferedShader.Link();
-
-    GBuffer.Init( w, h );
 
 }

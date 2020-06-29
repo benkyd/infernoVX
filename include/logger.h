@@ -119,10 +119,16 @@ public:
 			outStream.str( std::string() );;
 			outStream.flush();
 			if ( IsPaniced )
+			{
+				getchar();
 				exit( 0 );
+			}
 		}
 		if ( action == LOGGER_EXIT )
+		{
+			getchar();
 			exit( 0 );
+		}
 		return *this;
 	}
 

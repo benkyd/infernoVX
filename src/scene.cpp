@@ -16,7 +16,7 @@ Scene::Scene()
 
 void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
 {
-	*dimensions = glm::vec3 { 100, 100, 100 };
+	*dimensions = glm::vec3 { 10, 10, 10 };
 	
 	voxels = (uint8_t*)malloc( sizeof( uint8_t ) * (static_cast<size_t>(dimensions->x)
 											      * static_cast<size_t>(dimensions->y)
@@ -134,9 +134,9 @@ void Scene::Load()
 
 }
 
-void Scene::OpenGLDraw( Camera* camera, Shader* shader )
+void Scene::RenderScene( Camera* camera, Shader* shader )
 {
-	shader->Use();
+	shader->Bind();
 	glBindVertexArray( mVao );
 
 	GLint uniTrans = glGetUniformLocation( shader->Program, "Model" );

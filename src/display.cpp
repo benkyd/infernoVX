@@ -37,7 +37,7 @@ Display::Display( int w, int h, std::string title )
 
 	SDL_SetRelativeMouseMode( SDL_TRUE );
 
-	// Set VSYNC swap interval
+	// Set VSYNC
 	SDL_GL_SetSwapInterval( 1 );
 
 	mLogger << LOGGER_INFO << "Display set up" << LOGGER_ENDL;
@@ -47,7 +47,6 @@ Display::Display( int w, int h, std::string title )
 	glEnable( GL_MULTISAMPLE );
 	// glEnable(GL_CULL_FACE);
 	glCullFace( GL_BACK );
-	glEnable( GL_DEPTH_TEST );
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glViewport( 0, 0, w, h );
 
@@ -121,10 +120,9 @@ glm::vec2 Display::GetDisplaySizePx()
 
 void Display::PrepareFrame()
 {
-	static const float clear[] = { 186.0f / 255.0f, 214.0f / 255.0f, 254.0f / 255.0f };
-
+	glViewport( 0, 0, mW, mH );
+	
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	glClearBufferfv( GL_COLOR, 0, clear );
 }
 
 void Display::NextFrame()

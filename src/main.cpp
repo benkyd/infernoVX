@@ -50,8 +50,6 @@ void Loop( Display* display )
 
 	while ( display->IsWindowOpen )
 	{
-		display->PrepareFrame();
-
 		// return window size
 		bool didResize = display->Input( &e, &camera );
 		if ( didResize )
@@ -63,8 +61,6 @@ void Loop( Display* display )
 		}
 
 		pipeline.NextFrame( display );
-		
-		display->NextFrame();
 	}
 
 	// cleanup

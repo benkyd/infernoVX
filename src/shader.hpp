@@ -16,7 +16,8 @@ public:
 	GLuint Program;
 	void Link();
 
-	void Use();
+	void Bind();
+	void UnBind();
 
 	~Shader();
 private:

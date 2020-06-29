@@ -29,7 +29,7 @@ public:
 	// a mesh and send it to the gpu
 	void Load();
 
-	void OpenGLDraw( Camera* camera, Shader* shader );
+	void RenderScene( Camera* camera, Shader* shader );
 
 	// scene
 	glm::vec3 Dimensions;

@@ -38,6 +38,8 @@ public:
     // COUNT IS DEPTH
     void BindReadBuffer( EGBufferType::TextureType buffer );
 
+    GLuint GetTexture( EGBufferType::TextureType texture );
+
     ~RasterBuffer();
 
     GLuint FBO;
@@ -46,22 +48,6 @@ private:
 
     GLuint mTextures[EGBufferType::COUNT];
     GLuint mDepthTexture;
-};
-
-
-class RasterRenderer
-{
-public:
-
-    RasterRenderer( int w, int h );
-
-    // resize?
-
-    void Render( );
-
-    RasterBuffer GBuffer;
-    Shader DefferedShader;
-
 };
 
 #endif

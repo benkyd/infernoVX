@@ -7,12 +7,19 @@
 
 
 Pipeline::Pipeline( Display* display, Camera* camera )
-	: RasterPass( display->GetDisplaySizePx().x, display->GetDisplaySizePx().y )
 {
 	mCamera = camera;
 
 	mScene = new Scene();
 	mScene->Load();
+
+	DrawQuadShader.Load( std::string( _RESOURCES ) + "drawquad" );
+	DrawQuadShader.Link();
+
+	DefferedShader.Load( std::string( _RESOURCES ) + "deferred" );
+	DefferedShader.Link();
+
+	GBuffer.Init( display->GetDisplaySizePx().x, display->GetDisplaySizePx().y );
 
 	// settup drawing surface
 	// this will need UVs lol
@@ -39,12 +46,30 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 
 void Pipeline::NextFrame( Display* display )
 {
+	display->PrepareFrame();
 
-	// mScene->OpenGLDraw( mCamera, );
+	glEnable( GL_DEPTH_TEST );
+
+	GBuffer.BindWrite();
+
+	mScene->RenderScene( mCamera, &DefferedShader );
+
+	glBindFramebuffer( GL_FRAMEBUFFER, 0 ); // back to default
+
+	// this wont actually render the gbuffer textcoord texture
+	// because there isnt UVs for the screen quad lmao
+	// its just verts
+	glBindVertexArray( VAO );
+
+	DrawQuadShader.Bind();
+	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+
+	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+
+	glDrawArrays( GL_TRIANGLES, 0, 6 );
 
 
+	DrawQuadShader.UnBind();
 
-	// glDrawArrays( GL_TRIANGLES, 0, 6 );
-
-
+	display->NextFrame();
 }
