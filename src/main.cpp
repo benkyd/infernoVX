@@ -61,6 +61,7 @@ void Loop( Display* display )
 		}
 
 		pipeline.NextFrame( display );
+
 	}
 
 	// cleanup

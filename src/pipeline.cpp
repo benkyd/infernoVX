@@ -5,6 +5,7 @@
 
 #include "scene.hpp"
 
+#include "utilities.hpp"
 
 Pipeline::Pipeline( Display* display, Camera* camera )
 {
@@ -47,29 +48,42 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 void Pipeline::NextFrame( Display* display )
 {
 	display->PrepareFrame();
+	glCheckError();
 
 	glEnable( GL_DEPTH_TEST );
+	glCheckError();
 
 	GBuffer.BindWrite();
+	glCheckError();
 
 	mScene->RenderScene( mCamera, &DefferedShader );
+	glCheckError();
 
 	glBindFramebuffer( GL_FRAMEBUFFER, 0 ); // back to default
+	glCheckError();
 
 	// this wont actually render the gbuffer textcoord texture
 	// because there isnt UVs for the screen quad lmao
 	// its just verts
 	glBindVertexArray( VAO );
+	glCheckError();
 
-	DrawQuadShader.Bind();
-	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	// DrawQuadShader.Bind();
+	glCheckError();
+
+	// GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	glCheckError();
 
 	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	glCheckError();
 
 	glDrawArrays( GL_TRIANGLES, 0, 6 );
+	glCheckError();
 
 
 	DrawQuadShader.UnBind();
+	glCheckError();
 
 	display->NextFrame();
+	glCheckError();
 }

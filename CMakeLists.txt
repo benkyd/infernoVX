@@ -48,7 +48,7 @@ add_executable(${executable} ${SourceFiles})
 
 set_target_properties(${executable} PROPERTIES
 	CXX_STANDARD 20
-	CXX_EXTENSIONS OFF
+	CXX_EXTENSIONS ON
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
