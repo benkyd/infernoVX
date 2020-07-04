@@ -8,6 +8,8 @@
 #include "utilities.hpp"
 
 Pipeline::Pipeline( Display* display, Camera* camera )
+	: DrawQuadShader(),
+	  DefferedShader()
 {
 	mCamera = camera;
 
@@ -65,16 +67,17 @@ void Pipeline::NextFrame( Display* display )
 	// this wont actually render the gbuffer textcoord texture
 	// because there isnt UVs for the screen quad lmao
 	// its just verts
+
+	// GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	// glCheckError();
+
 	glBindVertexArray( VAO );
 	glCheckError();
 
-	// DrawQuadShader.Bind();
-	glCheckError();
-
-	// GBuffer.BindReadBuffer( EGBufferType::TexCoord );
-	glCheckError();
-
 	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	glCheckError();
+
+	DrawQuadShader.Bind();
 	glCheckError();
 
 	glDrawArrays( GL_TRIANGLES, 0, 6 );

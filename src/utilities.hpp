@@ -4,9 +4,13 @@
 #include <glad/glad.h>
 #include <string>
 
+#include <logger.h>
+
 #ifndef glCheckError()
 #define glCheckError() glCheckError_(__FILE__, __LINE__)
 #endif
+
+static Logger logger;
 
 inline GLenum glCheckError_( const char* file, int line )
 {
@@ -24,7 +28,7 @@ inline GLenum glCheckError_( const char* file, int line )
 			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
 			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
 		}
-		std::cout << "OpenGL Error: " << error << " | " << file << " (" << line << ")" << std::endl;
+		logger << LOGGER_ERROR << "OpenGL Error: " << error << " | " << file << " (" << line << ")" << LOGGER_ENDL;
 	}
 	return errorCode;
 }
