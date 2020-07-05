@@ -34,7 +34,7 @@ public:
 	void MouseMoved(glm::vec2 mouseDelta);
 
 	// Updatable by 
-	float MouseSensitivity = 0.1f;
+	float MouseSensitivity = 0.3f;
 	float CameraSpeed = 2.0f;
 
 	void UpdatePosition(glm::vec3 position);

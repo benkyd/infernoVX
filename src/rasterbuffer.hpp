@@ -46,6 +46,8 @@ public:
 
 private:
 
+    int mW, mH;
+
     GLuint mTextures[EGBufferType::COUNT];
     GLuint mDepthTexture;
 };

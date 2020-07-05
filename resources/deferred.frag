@@ -17,7 +17,10 @@ in vec3 fTexCoord;
 void main()
 {
     gPosition = fColour.rgb;
-	gAlbedo = vec3(0);
-	gSurfaceNormal = vec3(0);
+	gAlbedo = vec3(1);
+	// need to provide shader with
+	// normal and normal maps and
+	// bitangents n the rest of it
+	gSurfaceNormal = vec3(1);
 	gTexCoord = fTexCoord;
 }

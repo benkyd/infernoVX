@@ -4,14 +4,14 @@
 
 RasterBuffer::RasterBuffer()
 {
-
-
-
+    
 }
 
 void RasterBuffer::Init( int RenderWidth, int RenderHeight )
 {
     Logger logger;
+
+    mW = RenderWidth; mH = RenderHeight;
 
 	glGenFramebuffers( 1, &FBO );
 	glBindFramebuffer( GL_FRAMEBUFFER, FBO );
@@ -26,13 +26,14 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, mTextures[i], 0 );
     }
 
+    // i dont remember why this is here but i def aint removing it lol
     // nice 69 lol
     uint8_t numVerticies = 69;
 
     // depth
-    glBindTexture( GL_TEXTURE_2D, mDepthTexture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, RenderWidth, RenderHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mDepthTexture, 0 );
+    //glBindTexture( GL_TEXTURE_2D, mDepthTexture );
+    //glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, RenderWidth, RenderHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL );
+    //glFramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mDepthTexture, 0 );
 
     // same ammount here as EGBufferType
     GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
@@ -43,13 +44,14 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
     if ( status != GL_FRAMEBUFFER_COMPLETE )
     {
         logger << LOGGER_PANIC << "Could not validate framebuffer: " << status << LOGGER_ENDL;
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        return;
     }
 
     // put back the default framebuffer
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
     logger << LOGGER_DEBUG << "Loaded RasterBuffer with " << EGBufferType::COUNT + 1 << " buffers" << LOGGER_ENDL;
-
 }
 
 void RasterBuffer::Resize( int RenderWidth, int RenderHeight )
@@ -62,6 +64,7 @@ void RasterBuffer::Resize( int RenderWidth, int RenderHeight )
 
 void RasterBuffer::BindWrite()
 {
+    glViewport( 0, 0, mW, mH );
     glBindFramebuffer( GL_FRAMEBUFFER, FBO );
 }
 

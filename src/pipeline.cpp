@@ -27,6 +27,7 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 	// settup drawing surface
 	// this will need UVs lol
 	static const float vertices[] = {
+		// positions         
 		-1.0f,  1.0f, 0.0f,
 		 1.0f,  1.0f, 0.0f,
 		-1.0f, -1.0f, 0.0f,
@@ -52,10 +53,10 @@ void Pipeline::NextFrame( Display* display )
 	display->PrepareFrame();
 	glCheckError();
 
-	glEnable( GL_DEPTH_TEST );
+	GBuffer.BindWrite();
 	glCheckError();
 
-	GBuffer.BindWrite();
+	glEnable( GL_DEPTH_TEST );
 	glCheckError();
 
 	mScene->RenderScene( mCamera, &DefferedShader );
@@ -68,24 +69,24 @@ void Pipeline::NextFrame( Display* display )
 	// because there isnt UVs for the screen quad lmao
 	// its just verts
 
-	// GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	glCheckError();
+
+	// glBindVertexArray( VAO );
 	// glCheckError();
 
-	glBindVertexArray( VAO );
-	glCheckError();
+	// glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	// glCheckError();
 
-	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
-	glCheckError();
+	// DrawQuadShader.Bind();
+	// glCheckError();
 
-	DrawQuadShader.Bind();
-	glCheckError();
-
-	glDrawArrays( GL_TRIANGLES, 0, 6 );
-	glCheckError();
+	// glDrawArrays( GL_TRIANGLES, 0, 6 );
+	// glCheckError();
 
 
-	DrawQuadShader.UnBind();
-	glCheckError();
+	// DrawQuadShader.UnBind();
+	// glCheckError();
 
 	display->NextFrame();
 	glCheckError();
