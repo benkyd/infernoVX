@@ -38,6 +38,8 @@ public:
     // COUNT IS DEPTH
     void BindReadBuffer( EGBufferType::TextureType buffer );
 
+    void UnBind();
+
     GLuint GetTexture( EGBufferType::TextureType texture );
 
     ~RasterBuffer();

@@ -19,7 +19,7 @@ public:
 	// does not pass ownership
 	void NextFrame( Display* display );
 
-	GLuint VBO, VAO;
+	GLuint VBO, VAO, EBO;
 
 	RasterBuffer GBuffer;
 	Shader DefferedShader;

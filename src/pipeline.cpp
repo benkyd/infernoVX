@@ -26,23 +26,35 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 
 	// settup drawing surface
 	// this will need UVs lol
-	static const float vertices[] = {
-		// positions         
-		-1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		 1.0f, -1.0f, 0.0f,
-		 1.0f,  1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f
+	float vertices[] = {
+	//  Position              Texcoords
+		-1.0f,  1.0f, 0.0f,   0.0f, 0.0f, // Top-left
+		 1.0f,  1.0f, 0.0f,   1.0f, 0.0f, // Top-right
+		 1.0f, -1.0f, 0.0f,   1.0f, 1.0f, // Bottom-right
+		-1.0f, -1.0f, 0.0f,   0.0f, 1.0f  // Bottom-left
 	};
+
+	GLuint elements[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
 
 	glGenVertexArrays( 1, &VAO );
 	glBindVertexArray( VAO );
 
+	glGenBuffers( 1, &EBO );
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( elements ), elements, GL_STATIC_DRAW );
+
 	glGenBuffers( 1, &VBO );
 	glBindBuffer( GL_ARRAY_BUFFER, VBO );
 	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), (void*)0 );
+
+	glEnableVertexAttribArray( 0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof( float ), 0 );
+	glEnableVertexAttribArray( 1 );
+	glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof( float ), (void*)(3 * sizeof( float )) );
 
 	glEnableVertexAttribArray( 0 );
 
@@ -51,43 +63,23 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 void Pipeline::NextFrame( Display* display )
 {
 	display->PrepareFrame();
-	glCheckError();
-
+	
 	GBuffer.BindWrite();
-	glCheckError();
-
-	glEnable( GL_DEPTH_TEST );
-	glCheckError();
-
 	mScene->RenderScene( mCamera, &DefferedShader );
-	glCheckError();
+	GBuffer.UnBind();
 
-	glBindFramebuffer( GL_FRAMEBUFFER, 0 ); // back to default
-	glCheckError();
 
-	// this wont actually render the gbuffer textcoord texture
-	// because there isnt UVs for the screen quad lmao
-	// its just verts
+	glBindVertexArray( VAO );
+	DrawQuadShader.Bind();
 
+	GBuffer.BindRead();
 	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	
+	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+	DrawQuadShader.UnBind();
+	
+
 	glCheckError();
-
-	// glBindVertexArray( VAO );
-	// glCheckError();
-
-	// glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
-	// glCheckError();
-
-	// DrawQuadShader.Bind();
-	// glCheckError();
-
-	// glDrawArrays( GL_TRIANGLES, 0, 6 );
-	// glCheckError();
-
-
-	// DrawQuadShader.UnBind();
-	// glCheckError();
-
-	display->NextFrame();
-	glCheckError();
+	display->NextFrame();	
 }

@@ -75,15 +75,12 @@ void RasterBuffer::BindRead()
 
 void RasterBuffer::BindReadBuffer( EGBufferType::TextureType buffer )
 {
-    // use depth buffer
-    if ( buffer == EGBufferType::COUNT )
-    {
-        glReadBuffer( GL_DEPTH_ATTACHMENT );
-    }
-    else
-    {
-        glReadBuffer( GL_COLOR_ATTACHMENT0 + buffer );
-    }
+    glReadBuffer( GL_COLOR_ATTACHMENT0 + buffer );
+}
+
+void RasterBuffer::UnBind()
+{
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
 
 GLuint RasterBuffer::GetTexture( EGBufferType::TextureType texture )
