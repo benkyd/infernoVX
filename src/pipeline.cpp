@@ -72,13 +72,13 @@ void Pipeline::NextFrame( Display* display )
 	glBindVertexArray( VAO );
 	DrawQuadShader.Bind();
 
-	GBuffer.BindRead();
-	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
-	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	// GBuffer.BindRead();
+	// GBuffer.BindReadBuffer( EGBufferType::TexCoord );
 	
+	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+
 	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 	DrawQuadShader.UnBind();
-	
 
 	glCheckError();
 	display->NextFrame();	
