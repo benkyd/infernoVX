@@ -18,11 +18,9 @@ if (UNIX)
 endif(UNIX)
 
 if (WIN32)
-	set(CMAKE_CXX_FLAGS "/Ox")
 	include_directories(${executable}
 		"C:/dev/glm"
 		"C:/dev/SDL2/include/"
-		"C:/dev/SDL2_image/include/"
 	)
 endif (WIN32)
 
@@ -51,9 +49,8 @@ set_target_properties(${executable} PROPERTIES
 	CXX_EXTENSIONS ON
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
-
 if (UNIX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 	target_link_libraries(${executable}
 		SDL2
 		OpenGL::OpenGL

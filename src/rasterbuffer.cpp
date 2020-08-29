@@ -12,8 +12,8 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
     Logger logger;
 
     mW = RenderWidth; mH = RenderHeight;
-
-	glGenFramebuffers( 1, &FBO );
+	
+    glGenFramebuffers( 1, &FBO );
 	glBindFramebuffer( GL_FRAMEBUFFER, FBO );
 
 	glGenTextures( EGBufferType::COUNT, mTextures );
@@ -59,7 +59,7 @@ void RasterBuffer::Resize( int RenderWidth, int RenderHeight )
     // TODO: will involve remaking all buffers
     // might need to think about this because
     // it would mean that accumilation has
-    // to be reset in the raytracer
+    // to be reset in the raytracerwe
 }
 
 void RasterBuffer::BindWrite()
