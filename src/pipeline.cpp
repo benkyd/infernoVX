@@ -75,7 +75,7 @@ void Pipeline::NextFrame( Display* display )
 	GBuffer.BindRead();
 	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
 
-	glActiveTexture( GL_TEXTURE1 );
+	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
 
 	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );

@@ -49,6 +49,7 @@ Display::Display( int w, int h, std::string title )
 	glCullFace( GL_BACK );
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glViewport( 0, 0, w, h );
+	glEnable( GL_TEXTURE_2D );
 
 	mLogger << LOGGER_INFO << "Loaded OpenGL" << LOGGER_ENDL;
 	mLogger << LOGGER_ENDL;

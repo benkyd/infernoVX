@@ -24,6 +24,8 @@ void RasterBuffer::Init( int RenderWidth, int RenderHeight )
         glBindTexture( GL_TEXTURE_2D, mTextures[i] );
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB32F, RenderWidth, RenderHeight, 0, GL_RGB, GL_FLOAT, NULL );
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, mTextures[i], 0 );
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     // i dont remember why this is here but i def aint removing it lol

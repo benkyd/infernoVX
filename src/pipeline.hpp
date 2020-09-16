@@ -27,7 +27,7 @@ public:
 
 private:
 
-	// is now owned
+	// is not owned
 	Camera* mCamera;
 
 	// is owned
