@@ -93,7 +93,7 @@ void Camera::HandleMouse( SDL_Event e )
 		return;
 
 
-	float mouseDX = e.motion.xrel;
+	float mouseDX = -e.motion.xrel;
 	float mouseDY = e.motion.yrel;
 
 	glm::vec2 mouseDelta { mouseDX, mouseDY };
@@ -104,9 +104,6 @@ void Camera::HandleMouse( SDL_Event e )
 
 void Camera::MoveCamera( Uint8* state )
 {
-
-	float movementSpeed = 0.1f;
-
 	float dx = 0;
 	float dz = 0;
 	float dy = 0;
@@ -117,7 +114,7 @@ void Camera::MoveCamera( Uint8* state )
 		sin( Yaw ), cos( Yaw )
 	};
 
-	glm::vec2 f( 0.0, movementSpeed );
+	glm::vec2 f( 0.0, CameraSpeed);
 	f = f * rotate;
 
 	if ( state[SDL_SCANCODE_W] )
@@ -132,21 +129,21 @@ void Camera::MoveCamera( Uint8* state )
 	}
 	if ( state[SDL_SCANCODE_A] )
 	{
-		dz += f.x;
-		dx += -f.y;
-	}
-	if ( state[SDL_SCANCODE_D] )
-	{
 		dz -= f.x;
 		dx -= -f.y;
 	}
+	if ( state[SDL_SCANCODE_D] )
+	{
+		dz += f.x;
+		dx += -f.y;
+	}
 	if ( state[SDL_SCANCODE_SPACE] )
 	{
-		dy += movementSpeed;
+		dy += CameraSpeed;
 	}
 	if ( state[SDL_SCANCODE_LSHIFT] )
 	{
-		dy -= movementSpeed;
+		dy -= CameraSpeed;
 	}
 
 	// get current view matrix
@@ -162,12 +159,10 @@ void Camera::MoveCamera( Uint8* state )
 
 	// update the view matrix
 	UpdateView();
-
 }
 
 void Camera::MouseMoved( glm::vec2 mouseDelta )
 {
-
 	// note that yaw and pitch must be converted to radians.
 	// this is done in UpdateView() by glm::rotate
 	Yaw += MouseSensitivity * (mouseDelta.x / 100);
@@ -175,37 +170,30 @@ void Camera::MouseMoved( glm::vec2 mouseDelta )
 	Pitch = glm::clamp<float>( Pitch, -M_PI / 2, M_PI / 2 );
 
 	UpdateView();
-
 }
 
 void Camera::UpdatePosition( glm::vec3 position )
 {
-
 	Position = position;
 
 	UpdateView();
-
 }
 
 void Camera::UpdateEulerLookDirection( float roll, float pitch, float yaw )
 {
-
 	Roll = roll; Pitch = pitch; Yaw = yaw;
 	LookDirection.x = cos( Yaw ) * cos( Pitch );
 	LookDirection.y = sin( Yaw ) * cos( Pitch );
 	LookDirection.z = sin( Pitch );
 
 	UpdateView();
-
 }
 
 void Camera::UpdateLookDirection( glm::vec3 lookDirection )
 {
-
 	LookDirection = lookDirection;
 	Pitch = asin( -lookDirection.y );
 	Yaw = atan2( lookDirection.x, lookDirection.z );
 
 	UpdateView();
-
 }

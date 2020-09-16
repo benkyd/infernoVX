@@ -27,11 +27,11 @@ Pipeline::Pipeline( Display* display, Camera* camera )
 	// settup drawing surface
 	// this will need UVs lol
 	float vertices[] = {
-	//  Position              Texcoords
-		-1.0f,  1.0f, 0.0f,   0.0f, 0.0f, // Top-left
-		 1.0f,  1.0f, 0.0f,   1.0f, 0.0f, // Top-right
-		 1.0f, -1.0f, 0.0f,   1.0f, 1.0f, // Bottom-right
-		-1.0f, -1.0f, 0.0f,   0.0f, 1.0f  // Bottom-left
+	//  Position              Texcoords (Flipped because opengl)
+		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, // Top-left
+		 1.0f,  1.0f, 0.0f,   0.0f, 1.0f, // Top-right
+		 1.0f, -1.0f, 0.0f,   0.0f, 0.0f, // Bottom-right
+		-1.0f, -1.0f, 0.0f,   1.0f, 0.0f  // Bottom-left
 	};
 
 	GLuint elements[] = {
@@ -64,10 +64,11 @@ void Pipeline::NextFrame( Display* display )
 {
 	display->PrepareFrame();
 	
+	GBuffer.ClearTexture( EGBufferType::TexCoord );
+
 	GBuffer.BindWrite();
 	mScene->RenderScene( mCamera, &DefferedShader );
 	GBuffer.UnBind();
-
 
 	glBindVertexArray( VAO );
 	DrawQuadShader.Bind();

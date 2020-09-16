@@ -33,9 +33,9 @@ public:
 	// Mouse Delta
 	void MouseMoved(glm::vec2 mouseDelta);
 
-	// Updatable by 
-	float MouseSensitivity = 0.3f;
-	float CameraSpeed = 2.0f;
+	// Updatable by external classes
+	float MouseSensitivity = 0.1f;
+	float CameraSpeed = 0.4f;
 
 	void UpdatePosition(glm::vec3 position);
 	void UpdateEulerLookDirection(float roll, float pitch, float yaw);

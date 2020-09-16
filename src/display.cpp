@@ -46,7 +46,7 @@ Display::Display( int w, int h, std::string title )
 	gladLoadGLLoader( SDL_GL_GetProcAddress );
 	glEnable( GL_MULTISAMPLE );
 	// glEnable(GL_CULL_FACE);
-	glCullFace( GL_BACK );
+	// glCullFace( GL_BACK );
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glViewport( 0, 0, w, h );
 	glEnable( GL_TEXTURE_2D );

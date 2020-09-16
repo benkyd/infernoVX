@@ -75,6 +75,11 @@ void RasterBuffer::BindRead()
     glBindFramebuffer( GL_READ_FRAMEBUFFER, FBO );
 }
 
+void RasterBuffer::BindBuffer( EGBufferType::TextureType buffer )
+{
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + buffer, GL_TEXTURE_2D, mTextures[buffer], 0);
+}
+
 void RasterBuffer::BindReadBuffer( EGBufferType::TextureType buffer )
 {
     glReadBuffer( GL_COLOR_ATTACHMENT0 + buffer );
@@ -83,6 +88,19 @@ void RasterBuffer::BindReadBuffer( EGBufferType::TextureType buffer )
 void RasterBuffer::UnBind()
 {
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+}
+
+void RasterBuffer::ClearTexture( EGBufferType::TextureType texture )
+{
+    BindWrite();
+    glDrawBuffer( GL_COLOR_ATTACHMENT0 + texture );
+    BindBuffer( texture );
+    glClear( GL_COLOR_BUFFER_BIT );
+}
+
+void RasterBuffer::ClearAllTextures()
+{
+
 }
 
 GLuint RasterBuffer::GetTexture( EGBufferType::TextureType texture )

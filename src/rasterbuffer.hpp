@@ -36,15 +36,19 @@ public:
     void BindWrite();
     void BindRead();
     // COUNT IS DEPTH
+    void BindBuffer( EGBufferType::TextureType buffer );
     void BindReadBuffer( EGBufferType::TextureType buffer );
 
     void UnBind();
 
+    void ClearTexture( EGBufferType::TextureType texture );
+    void ClearAllTextures();
+    
     GLuint GetTexture( EGBufferType::TextureType texture );
 
-    ~RasterBuffer();
-
     GLuint FBO;
+    
+    ~RasterBuffer();
 
 private:
 
