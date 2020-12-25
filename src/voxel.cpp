@@ -15,6 +15,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 	std::vector<glm::vec3> verts;
 	std::vector<glm::vec2> uvs;
+	glm::vec3 normal;
 
 	switch ( face )
 	{
@@ -24,6 +25,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeTopFace;
 		uvs = CubeTopFaceUVs;
+		normal = { 0.0, 1.0, 0.0 };
 
 		break;
 	}
@@ -33,6 +35,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeBottomFace;
 		uvs = CubeBottomFaceUVs;
+		normal = { 0.0, -1.0, 0.0 };
 
 		break;
 	}
@@ -42,6 +45,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeLeftFace;
 		uvs = CubeLeftFaceUVs;
+		normal = { -1.0, 0.0, 0.0 };
 
 		break;
 	}
@@ -51,6 +55,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeRightFace;
 		uvs = CubeRightFaceUVs;
+		normal = { 1.0, 0.0, 0.0 };
 
 		break;
 	}
@@ -60,6 +65,7 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeFrontFace;
 		uvs = CubeFrontFaceUVs;
+		normal = { 0.0, 0.0, 1.0 };
 
 		break;
 	}
@@ -69,12 +75,12 @@ void Voxel::AddFace( EFaceType::Face face )
 
 		verts = CubeBackFace;
 		uvs = CubeBackFaceUVs;
+		normal = { 0.0, 0.0, -1.0 };
 
 		break;
 	}
 
 	}
-
 
 	verts = mTranslateIntoWorld( verts, mPosition );
 	mVertices.insert( mVertices.end(), verts.begin(), verts.end() );

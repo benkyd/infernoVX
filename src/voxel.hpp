@@ -165,6 +165,8 @@ private:
 
 	std::vector<glm::vec3> mVertices;
 	std::vector<glm::vec3> mUvs;
+	// These are on a per face basis
+	std::vector<glm::vec3> normals;
 
 };
 

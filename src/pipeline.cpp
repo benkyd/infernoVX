@@ -64,7 +64,7 @@ void Pipeline::NextFrame( Display* display )
 {
 	display->PrepareFrame();
 	
-	GBuffer.ClearTexture( EGBufferType::TexCoord );
+	GBuffer.ClearTexture( EGBufferType::SurfaceNormal );
 
 	GBuffer.BindWrite();
 	mScene->RenderScene( mCamera, &DefferedShader );
@@ -74,10 +74,10 @@ void Pipeline::NextFrame( Display* display )
 	DrawQuadShader.Bind();
 
 	GBuffer.BindRead();
-	GBuffer.BindReadBuffer( EGBufferType::TexCoord );
+	GBuffer.BindReadBuffer( EGBufferType::SurfaceNormal );
 
 	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::TexCoord ) );
+	glBindTexture( GL_TEXTURE_2D, GBuffer.GetTexture( EGBufferType::SurfaceNormal ) );
 
 	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 	DrawQuadShader.UnBind();

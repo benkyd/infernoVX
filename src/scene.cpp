@@ -14,7 +14,7 @@ Scene::Scene()
 
 }
 
-void loadScene(glm::vec3* dimensions, uint8_t*& voxels)
+void loadScene( glm::vec3* dimensions, uint8_t*& voxels )
 {
 	*dimensions = glm::vec3 { 10, 10, 10 };
 	
