@@ -85,11 +85,11 @@ void Voxel::AddFace( EFaceType::Face face )
 	verts = mTranslateIntoWorld( verts, mPosition );
 	mVertices.insert( mVertices.end(), verts.begin(), verts.end() );
 
+	// UNUSED
 	// std::shared_ptr<CBlockEntry> block = CBlockDictionary::GetInstance()->BlockEntries[Block];
-
 	// uint16_t tex = block->FaceTextures[(uint16_t) face];
 
-	uint16_t tex = 1;
+	uint16_t tex = 1; // spare couple bytes to do something with at some point
 
 	std::vector<glm::vec3> uvws = {
 		{ uvs[0].x, uvs[0].y, (float) tex },
@@ -102,12 +102,19 @@ void Voxel::AddFace( EFaceType::Face face )
 
 	mUvs.insert( mUvs.end(), uvws.begin(), uvws.end() );
 
+	std::vector<glm::vec3> normals;
+	for (int i = 0; i < 6; i++)
+		normals.push_back( normal );
+
+	mNormals.insert( mNormals.end(), normals.begin(), normals.end() );
+
 }
 
-void Voxel::GetMesh( std::vector<glm::vec3>& verts, std::vector<glm::vec3>& uvs )
+void Voxel::GetMesh( std::vector<glm::vec3>& verts, std::vector<glm::vec3>& uvs, std::vector<glm::vec3>& normals )
 {
 	verts = mVertices;
 	uvs = mUvs;
+	normals = mNormals;
 }
 
 void Voxel::Clear()
@@ -115,7 +122,7 @@ void Voxel::Clear()
 
 	mVertices.clear();
 	mUvs.clear();
-
+	mNormals.clear();
 }
 
 std::vector<glm::vec3> Voxel::mTranslateIntoWorld( std::vector<glm::vec3> verts, glm::vec3 trans )

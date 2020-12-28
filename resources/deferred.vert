@@ -2,9 +2,11 @@
 
 layout (location = 0) in vec3 vPosition;
 layout (location = 1) in vec3 vTexCoord;
+layout (location = 2) in vec3 vNormal;
 
 out vec3 fColour;
 out vec3 fTexCoord;
+out vec3 fNormal;
 
 uniform mat4 Model;
 uniform mat4 View;
@@ -13,6 +15,7 @@ uniform mat4 Proj;
 void main() {
 	
 	fTexCoord = vTexCoord;
+	fNormal = vNormal;
 	
 	gl_Position = Proj * View * Model * vec4(vPosition, 1.0);
 

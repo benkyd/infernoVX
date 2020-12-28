@@ -85,15 +85,18 @@ void Scene::Load()
 
 		std::vector<glm::vec3> tempVerts;
 		std::vector<glm::vec3> tempUVs;
-		tmp->GetMesh( tempVerts, tempUVs );
+		std::vector<glm::vec3> tempNormals;
+		tmp->GetMesh( tempVerts, tempUVs, tempNormals );
 		
 		mVertices.insert( mVertices.end(), tempVerts.begin(), tempVerts.end() );
 		mUvs.insert( mUvs.end(), tempUVs.begin(), tempUVs.end() );
+		mNormals.insert( mNormals.end(), tempNormals.begin(), tempNormals.end() );
 
 		delete tmp;
 
 		tempVerts.clear();
 		tempUVs.clear();
+		tempNormals.clear();
 	}
 
 	logger << LOGGER_INFO << "Scene mesh built" << LOGGER_ENDL;
@@ -107,10 +110,12 @@ void Scene::Load()
 	std::vector<glm::vec3> data;
 	data.insert( data.end(), mVertices.begin(), mVertices.end() );
 	data.insert( data.end(), mUvs.begin(), mUvs.end() );
+	data.insert( data.end(), mNormals.begin(), mNormals.end() );
 
-	logger << LOGGER_DEBUG << "The following 3 values are the verts and uvs sent to the gpu" << LOGGER_ENDL;
+	logger << LOGGER_DEBUG << "The following 3 values are the verts, uvs and normals sent to the gpu" << LOGGER_ENDL;
 	logger << LOGGER_DEBUG << mVertices.size() << LOGGER_ENDL;
 	logger << LOGGER_DEBUG << mUvs.size() << LOGGER_ENDL;
+	logger << LOGGER_DEBUG << mNormals.size() << LOGGER_ENDL;
 	logger << LOGGER_DEBUG << data.size() << LOGGER_ENDL;
 
 	mNumVerts = mVertices.size();
@@ -123,8 +128,12 @@ void Scene::Load()
 	glEnableVertexAttribArray( 1 );
 	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 0, (const void*)(mVertices.size() * sizeof( glm::vec3 )) );
 
+	glEnableVertexAttribArray( 2 );
+	glVertexAttribPointer( 2, 3, GL_FLOAT, GL_FALSE, 0, (const void*)(mVertices.size() + mNormals.size() * sizeof( glm::vec3 )) );
+
 	mVertices.clear();
 	mUvs.clear();
+	mNormals.clear();
 
 	data.clear();
 

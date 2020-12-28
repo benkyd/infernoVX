@@ -48,6 +48,7 @@ private:
 	// memory if theyre kept
 	std::vector<glm::vec3> mVertices;
 	std::vector<glm::vec3> mUvs;
+	std::vector<glm::vec3> mNormals;
 	int mNumVerts = 0;
 
 	// OpenGL stuff

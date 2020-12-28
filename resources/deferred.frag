@@ -7,6 +7,7 @@ layout (location = 3) out vec3 gTexCoord;
 
 in vec3 fColour;
 in vec3 fTexCoord;
+in vec3 fNormal;
 
 // float near = 0.1;
 // float far = 10;
@@ -21,6 +22,6 @@ void main()
 	// need to provide shader with
 	// normal and normal maps and
 	// bitangents n the rest of it
-	gSurfaceNormal = vec3(1);
+	gSurfaceNormal = fNormal;
 	gTexCoord = fTexCoord;
 }

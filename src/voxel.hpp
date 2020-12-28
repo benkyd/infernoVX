@@ -149,7 +149,7 @@ public:
 	// for the same face there will be a duplicate in
 	// the mesh, cba to add ones
 	void AddFace( EFaceType::Face face );
-	void GetMesh( std::vector<glm::vec3>& verts, std::vector<glm::vec3>& uvs );
+	void GetMesh( std::vector<glm::vec3>& verts, std::vector<glm::vec3>& uvs, std::vector<glm::vec3>& normals );
 
 	void Clear();
 
@@ -165,8 +165,9 @@ private:
 
 	std::vector<glm::vec3> mVertices;
 	std::vector<glm::vec3> mUvs;
-	// These are on a per face basis
-	std::vector<glm::vec3> normals;
+	// These are on a per vertex basis
+	// gotta dissable GL interpolation
+	std::vector<glm::vec3> mNormals;
 
 };
 
